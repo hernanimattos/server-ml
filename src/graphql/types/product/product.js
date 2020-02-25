@@ -24,7 +24,7 @@ type Item {
     condition: String,
     free_shipping: Boolean
     description: String
-    sold_quantity: Number
+    sold_quantity: Float
 }
 
 type Products {
