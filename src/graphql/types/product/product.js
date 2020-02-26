@@ -1,7 +1,5 @@
 import { gql } from 'apollo-server';
-import { produsearchProductsResolver } from './product.resolver';
-
-// console.log(ProductResolver, 'kkkkk');
+import { searchProductsResolver } from './product.resolver';
 
 const typeDefs = gql`
   type Author {
@@ -46,8 +44,8 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    searchProducts: (teobj, args, context, info) =>
-      produsearchProductsResolver(args)
+    // eslint-disable-next-line no-unused-vars
+    searchProducts: (teobj, args, context, info) => searchProductsResolver(args)
   }
 };
 

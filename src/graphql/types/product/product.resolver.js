@@ -49,9 +49,7 @@ const getProduct = async id => {
 };
 
 const getDescriptions = async id => {
-  const { data = {} } = await Http.get(
-    `https://api.mercadolibre.com/items/${id}/description`
-  );
+  const { data = {} } = await Http.get(`items/${id}/description`);
   const { plain_text = null } = data;
 
   return plain_text;
@@ -66,7 +64,7 @@ const getAllCategories = filters =>
     })
     .reduce((a, b) => [a + b], []);
 
-const produsearchProductsResolver = async term => {
+const searchProductsResolver = async term => {
   const { term: productToSearch } = term;
   const { data } = await Http.get(`sites/MLA/search?q=${productToSearch}`);
   const { results, available_filters } = data;
@@ -78,4 +76,4 @@ const produsearchProductsResolver = async term => {
   };
 };
 
-export { produsearchProductsResolver };
+export { searchProductsResolver };
