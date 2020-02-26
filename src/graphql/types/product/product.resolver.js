@@ -30,6 +30,7 @@ const getProducType = async prod => {
       decimals: await getDecimals(currency),
       amount
     },
+    description: await getDescriptions(id),
     condition,
     free_shipping,
     picture: pictures[0].url,
@@ -45,6 +46,15 @@ const getProduct = async id => {
     sold_quantity,
     price
   };
+};
+
+const getDescriptions = async id => {
+  const { data = {} } = await Http.get(
+    `https://api.mercadolibre.com/items/${id}/description`
+  );
+  const { plain_text = null } = data;
+
+  return plain_text;
 };
 
 const getAllCategories = filters =>

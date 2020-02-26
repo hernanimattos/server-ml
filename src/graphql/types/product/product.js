@@ -13,6 +13,7 @@ const typeDefs = gql`
     currency: String
     amount: Float
     decimals: Float
+    value: Float
   }
 
   type Item {
