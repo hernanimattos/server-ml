@@ -21,13 +21,14 @@ const getProducType = async prod => {
   const { amount = 0 } = installments || {};
   const { pictures, sold_quantity, price: value } = await getProduct(id);
 
+  const decimals = await getDecimals(currency);
   return {
     id,
     title,
     price: {
-      value,
+      value: fixValue(value, decimals),
       currency,
-      decimals: await getDecimals(currency),
+      decimals,
       amount
     },
     description: await getDescriptions(id),
@@ -40,30 +41,26 @@ const getProducType = async prod => {
 
 const getProduct = async id => {
   const { data } = await Http.get(`items/${id}`);
-  const { pictures, sold_quantity, price } = data;
+  const { pictures, sold_quantity, price: value } = data;
   return {
     pictures,
     sold_quantity,
-    price
+    value
   };
 };
 
 const getProductByIdResolver = async args => {
   const { id } = args;
-  console.log(id);
   const { data } = await Http.get(`items/${id}`);
-  // console.log(data, 'kkkkk');
-  const { title, price: value, pictures, condition } = data;
+  const { title, price: value, pictures, condition, currency_id } = data;
   const picture = pictures[0].url;
-
-  const t = await getDescriptions(id);
-  console.log(t);
+  const decimals = await getDecimals(currency_id);
 
   return {
     item: {
       title,
       price: {
-        value
+        value: fixValue(value, decimals)
       },
       picture,
       condition,
@@ -82,7 +79,7 @@ const getDescriptions = async id => {
     description = 'Não possui';
   }
 
-  return description.replace(/(\r\n|\n|\r)/gm, '');
+  return description.replace(/(_|-)/gm, '');
 };
 
 const getAllCategories = filters =>
@@ -104,6 +101,11 @@ const searchProductsResolver = async term => {
     categories: await getAllCategories(available_filters),
     items
   };
+};
+
+const fixValue = (value, fix) => {
+  console.log(value, fix);
+  return `$${value.toFixed(fix)}`;
 };
 
 export { searchProductsResolver, getProductByIdResolver };
