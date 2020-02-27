@@ -1,5 +1,8 @@
 import { gql } from 'apollo-server';
-import { searchProductsResolver } from './product.resolver';
+import {
+  searchProductsResolver,
+  getProductByIdResolver
+} from './product.resolver';
 
 const typeDefs = gql`
   type Author {
@@ -38,14 +41,15 @@ const typeDefs = gql`
 
   type Query {
     searchProducts(term: String!): Products!
-    product(id: ID!): Product!
+    getProductById(id: String!): Product!
   }
 `;
 
 const resolvers = {
   Query: {
     // eslint-disable-next-line no-unused-vars
-    searchProducts: (teobj, args, context, info) => searchProductsResolver(args)
+    searchProducts: (obj, args, context, info) => searchProductsResolver(args),
+    getProductById: (obj, args, context, info) => getProductByIdResolver(args)
   }
 };
 

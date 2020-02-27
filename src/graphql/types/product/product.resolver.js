@@ -48,11 +48,41 @@ const getProduct = async id => {
   };
 };
 
-const getDescriptions = async id => {
-  const { data = {} } = await Http.get(`items/${id}/description`);
-  const { plain_text = null } = data;
+const getProductByIdResolver = async args => {
+  const { id } = args;
+  console.log(id);
+  const { data } = await Http.get(`items/${id}`);
+  // console.log(data, 'kkkkk');
+  const { title, price: value, pictures, condition } = data;
+  const picture = pictures[0].url;
 
-  return plain_text;
+  const t = await getDescriptions(id);
+  console.log(t);
+
+  return {
+    item: {
+      title,
+      price: {
+        value
+      },
+      picture,
+      condition,
+      description: await getDescriptions(id)
+    }
+  };
+};
+
+const getDescriptions = async id => {
+  let description = null;
+  try {
+    const { data = {} } = await Http.get(`items/${id}/description`);
+    const { plain_text = null } = data;
+    description = plain_text;
+  } catch (e) {
+    description = 'Não possui';
+  }
+
+  return description.replace(/(\r\n|\n|\r)/gm, '');
 };
 
 const getAllCategories = filters =>
@@ -76,4 +106,4 @@ const searchProductsResolver = async term => {
   };
 };
 
-export { searchProductsResolver };
+export { searchProductsResolver, getProductByIdResolver };
