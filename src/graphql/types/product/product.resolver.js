@@ -104,8 +104,8 @@ const searchProductsResolver = async term => {
 };
 
 const fixValue = (value, fix) => {
-  console.log(value, fix);
-  return `$${value.toFixed(fix)}`;
+  const price = !value ? 'não informado' : `$${value.toFixed(fix)}`;
+  return price;
 };
 
 export { searchProductsResolver, getProductByIdResolver };
